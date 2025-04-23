@@ -101,6 +101,6 @@ git merge upstream/main
 5. No subas claves ni tokens (usa .env).
 
 ✅ Recursos Recomendados
-1. GitHub Docs
-2. Pro Git Book
-3. gitignore.io
+1. [GitHub Docs](https://docs.github.com/es)
+2. [Pro Git Book](https://git-scm.com/book/en/v2)
+3. [gitignore.io](https://www.toptal.com/developers/gitignore/)
