@@ -4,17 +4,19 @@ En JavaScript (y por ende en Node.js), existen varios tipos de bucles para recor
 
 
 ```js
-# 💡 Útil cuando necesitas saber la posición (índice) exacta o recorrer un número específico de veces.
-# Ideal para recorrer arreglos con control total del índice.
+/* 💡 Útil cuando necesitas saber la posición (índice) exacta o recorrer un número específico de veces.
+Ideal para recorrer arreglos con control total del índice.
+*/
 
 for (let i = 0; i < 5; i++) {
   console.log(`Iteración: ${i}`);
 }
 
 .
-
+/*
 🔹 2. for...of
-# Recorre los valores de un array o iterable. ¡Súper limpio y legible!
+ Recorre los valores de un array o iterable. ¡Súper limpio y legible!
+*/
 
 const frutas = ["manzana", "pera", "banana"];
 
@@ -22,9 +24,11 @@ for (const fruta of frutas) {
   console.log(`Me gusta la ${fruta}`);
 }
 
+/*
 🔹 3. for...in
-# Recorre las claves de un objeto (o índices de un array, aunque no es recomendable para eso).
-# ⚠️ Evita usar for...in con arrays, ya que puede recorrer propiedades heredadas.
+Recorre las claves de un objeto (o índices de un array, aunque no es recomendable para eso).
+⚠️ Evita usar for...in con arrays, ya que puede recorrer propiedades heredadas.
+*/
 
 const usuario = {
   nombre: "Luis",
@@ -37,10 +41,11 @@ for (const clave in usuario) {
 }
 
 
+/*
 🔹 4. while
-# Repite mientras una condición sea verdadera. Ideal cuando no sabes cuántas veces ejecutarás algo.
-# 💡 Úsalo cuando la condición depende de algo fuera del bucle.
-
+Repite mientras una condición sea verdadera. Ideal cuando no sabes cuántas veces ejecutarás algo.
+💡 Úsalo cuando la condición depende de algo fuera del bucle.
+*/
 let contador = 0;
 
 while (contador < 3) {
@@ -48,9 +53,11 @@ while (contador < 3) {
   contador++;
 }
 
+/*
 🔹 5. do...while
-# Igual que while, pero garantiza al menos una ejecución.
-# 💡 Útil si necesitas ejecutar el bloque al menos una vez sí o sí.
+Igual que while, pero garantiza al menos una ejecución.
+💡 Útil si necesitas ejecutar el bloque al menos una vez sí o sí.
+*/
 
 let numero = 0;
 
@@ -59,9 +66,11 @@ do {
   numero++;
 } while (numero < 3);
 
+/*
 🔹 6. .forEach() (método de arrays)
-# Método moderno y limpio para recorrer arrays.
-# 💡 No se puede usar break o return como en un bucle tradicional.
+Método moderno y limpio para recorrer arrays.
+💡 No se puede usar break o return como en un bucle tradicional.
+*/
 
 const numeros = [10, 20, 30];
 
