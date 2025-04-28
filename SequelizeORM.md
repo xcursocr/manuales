@@ -244,6 +244,161 @@ order: [[req.query.sort || 'createdAt', req.query.dir || 'DESC']]
 
 ```
 
+🛠 13. Búsquedas Dinámicas (LIKE)
+💡 Buscar por nombre, descripción o cualquier campo de texto.
+
+```js
+import { Op } from 'sequelize';
+
+export const searchProducts = async (req, res) => {
+  const { q } = req.query;
+
+  const products = await Product.findAll({
+    where: {
+      nombre: {
+        [Op.like]: `%${q}%`
+      }
+    },
+    include: [
+      { model: Category, as: "category" },
+      { model: Image, as: "images" }
+    ],
+    order: [["nombre", "ASC"]]
+  });
+
+  res.render("admin/products/search", {
+    title: "Buscar Productos",
+    products,
+    q
+  });
+};
+
+```
+📊 14. Reporte de Conteos por Categoría (Agrupaciones GROUP BY)
+💡 Saber cuántos productos tiene cada categoría.
+💬 sequelize.fn() permite usar funciones de SQL como COUNT, SUM, AVG, etc.
+```js
+import { sequelize } from "../config/database.js";
+
+export const countProductsByCategory = async (req, res) => {
+  const results = await Product.findAll({
+    attributes: [
+      "categoryId",
+      [sequelize.fn("COUNT", sequelize.col("id")), "totalProductos"]
+    ],
+    group: ["categoryId"],
+    include: [{ model: Category, as: "category" }]
+  });
+
+  res.json(results);
+};
+
+```
+🔗 15. Filtros por Parámetros de URL
+💡 Listar productos por categoría, rango de precios, o estado.
+
+```js
+import { Op } from 'sequelize';
+
+export const filterProducts = async (req, res) => {
+  const { minPrice, maxPrice, categoryId } = req.query;
+
+  const products = await Product.findAll({
+    where: {
+      ...(categoryId && { categoryId }),
+      ...(minPrice && maxPrice && {
+        precio: {
+          [Op.between]: [minPrice, maxPrice]
+        }
+      })
+    },
+    include: [
+      { model: Category, as: "category" },
+      { model: Image, as: "images" }
+    ],
+    order: [["precio", "ASC"]]
+  });
+
+  res.render("admin/products/filter", {
+    title: "Filtrar Productos",
+    products
+  });
+};
+
+```
+🔥 16. Múltiples Relaciones Anidadas (Multi-Join)
+💡 Traer usuario, sus posts, y los comentarios de esos posts.
+💬 Puedes anidar include tantas veces como necesites, según las relaciones.
+```js
+const usuarios = await Usuario.findAll({
+  include: [{
+    model: Post,
+    as: "posts",
+    include: [{
+      model: Comment,
+      as: "comments"
+    }]
+  }]
+});
+
+```
+🎯 17. Subconsultas Manuales (SubQuery)
+💡 Consultar el primer producto más barato de cada categoría (requiere SQL más complejo, usando Sequelize o RAW SQL).
+
+Ejemplo usando Sequelize:
+💬 sequelize.literal() permite usar SQL crudo donde Sequelize no puede construirlo solo.
+```js
+const productos = await Product.findAll({
+  where: {
+    precio: {
+      [Op.lte]: sequelize.literal(`(
+        SELECT MIN(precio)
+        FROM products AS p2
+        WHERE p2.categoryId = products.categoryId
+      )`)
+    }
+  },
+  include: [{ model: Category, as: "category" }]
+});
+
+```
+🚀 18. Orden Dinámico desde la Vista
+💡 Permitir que el usuario ordene (por precio, fecha, nombre).
+Ejemplo de URLs para probar:
+
+/productos?sortBy=precio&sortDir=ASC
+
+/productos?sortBy=nombre&sortDir=DESC
+```js
+export const listProducts = async (req, res) => {
+  const { sortBy = "createdAt", sortDir = "DESC" } = req.query;
+
+  const products = await Product.findAll({
+    order: [[sortBy, sortDir]],
+    include: [
+      { model: Category, as: "category" },
+      { model: Image, as: "images" }
+    ]
+  });
+
+  res.render("admin/products/index", {
+    title: "Productos",
+    products
+  });
+};
+
+```
+ Resumen Final de Consultas Avanzadas
+
+Técnica	Uso práctico
+LIKE	Buscadores en tiempo real
+findAndCountAll + Paginación	Listados paginados
+Group by + Count/Sum	Reportes, dashboard
+Filtros dinámicos (URL)	Catálogos filtrables
+Relaciones anidadas	Cargar varias tablas juntas
+Subconsultas	Datos más complejos
+Orden dinámico (sortBy)	Tablas ordenables en frontend
+
 ## 🧠 Buenas Prácticas
 
 - Usa `async/await` para todo.
