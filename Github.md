@@ -1,5 +1,21 @@
 # 🐙 GitHub: Guía Práctica para Subir Proyectos y Trabajar en Equipo
 
+## 📦 0. Clonar repositorio
+
+```bash
+git clone https://github.com/xcursocr/next-bascula-rodriguez.git
+```
+## 📦 0a. Clonar rama especifica de un repositorio
+
+```bash
+# Option #1
+git clone --branch <branchname> <remote-repo-url>
+
+# Option #2
+# Aquí -b es sólo un alias para --branch
+git clone -b <branchname> <remote-repo-url>
+```
+
 ## 📦 1. Inicializar y Subir un Proyecto Nuevo
 
 ```bash
